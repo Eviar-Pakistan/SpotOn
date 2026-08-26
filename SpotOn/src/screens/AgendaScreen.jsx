@@ -1,6 +1,6 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
 import ScreenShell from '../components/ScreenShell'
 import GoldButton from '../components/GoldButton'
-import spoton from '../assets/spoton.png'
 import BrandHeader from '../components/BrandHeader'
 const AGENDA = [
   { time: '06:30 PM', title: 'Registration, Cocktail Reception & Networking', icon: 'people' },
@@ -57,9 +57,33 @@ function AgendaIcon({ type }) {
 }
 
 export default function AgendaScreen({ onProceed }) {
+  const listRef = useRef(null)
+  const [canScrollMore, setCanScrollMore] = useState(false)
+
+  const updateScrollHint = useCallback(() => {
+    const el = listRef.current
+    if (!el) return
+    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight
+    setCanScrollMore(remaining > 16)
+  }, [])
+
+  useEffect(() => {
+    updateScrollHint()
+    const el = listRef.current
+    if (!el) return undefined
+
+    const observer = new ResizeObserver(updateScrollHint)
+    observer.observe(el)
+    window.addEventListener('resize', updateScrollHint)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updateScrollHint)
+    }
+  }, [updateScrollHint])
+
   return (
     <ScreenShell className="agenda-screen">
-       <BrandHeader />
+      <BrandHeader />
 
       <div className="agenda-copy">
         <h1>Adstreet Awards</h1>
@@ -70,19 +94,26 @@ export default function AgendaScreen({ onProceed }) {
         </h2>
       </div>
 
-      <ul className="agenda-list">
-        {AGENDA.map((item) => (
-          <li key={item.time}>
-            <div className="agenda-track">
-              <AgendaIcon type={item.icon} />
-            </div>
-            <div className="agenda-text">
-              <strong>{item.time}</strong>
-              <span>{item.title}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className={`agenda-list-wrap${canScrollMore ? '' : ' is-end'}`}>
+        <ul className="agenda-list" ref={listRef} onScroll={updateScrollHint}>
+          {AGENDA.map((item) => (
+            <li key={item.time}>
+              <div className="agenda-track">
+                <AgendaIcon type={item.icon} />
+              </div>
+              <div className="agenda-text">
+                <strong>{item.time}</strong>
+                <span>{item.title}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <span className="agenda-scroll-hint" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 8.5 12 14.5 18 8.5" />
+          </svg>
+        </span>
+      </div>
 
       <p className="agenda-footer">We look forward to an unforgettable night!</p>
       <GoldButton onClick={onProceed}>GET AWARD</GoldButton>

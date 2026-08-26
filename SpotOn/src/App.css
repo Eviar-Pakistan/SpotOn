@@ -440,14 +440,18 @@ h2 {
   background: var(--gold);
 }
 
+.agenda-list-wrap {
+  position: relative;
+  min-height: 0;
+  margin: 10px 0 0 10px;
+}
+
 .agenda-list {
   list-style: none;
-  margin: 4px 0 0;
-  padding: 0 10px 8px 4px;
+  margin: 0;
+  padding: 0 10px 28px 4px;
   overflow-y: scroll;
   min-height: 0;
-  margin-left: 10px;
-  margin-top: 10px;
   max-height: 420px;
   scrollbar-width: thin;
   scrollbar-color: #d4af37 #1a1a1a;
@@ -471,6 +475,47 @@ h2 {
 
 .agenda-list::-webkit-scrollbar-thumb:hover {
   background: #f6e27a;
+}
+
+.agenda-scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: var(--gold);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+  animation: agendaBounce 1.15s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.55));
+}
+
+.agenda-list-wrap.is-end .agenda-scroll-hint {
+  opacity: 0;
+}
+
+.agenda-scroll-hint svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes agendaBounce {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(6px);
+  }
 }
 
 .agenda-list li {
@@ -573,6 +618,12 @@ h2 {
 
   .brand-logo-adstreet {
     height: 20px;
+  }
+
+  .agenda-list-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .agenda-list {
@@ -718,6 +769,7 @@ h2 {
   color: var(--white);
   font-size: clamp(0.88rem, 2.4vh, 1rem);
   outline: none;
+  scroll-margin-bottom: 24px;
 }
 
 .name-modal input::placeholder {
@@ -733,6 +785,49 @@ h2 {
   margin: -8px 0 12px;
   color: #f0b4b4;
   font-size: 0.82rem;
+}
+
+.name-screen.is-keyboard {
+  flex: none;
+}
+
+.name-screen.is-keyboard .screen-body {
+  overflow: hidden;
+}
+
+.name-screen.is-keyboard .brand-header {
+  margin: 0 0 4px;
+  padding: 0;
+}
+
+.name-screen.is-keyboard .gift-icon {
+  display: none;
+}
+
+.name-screen.is-keyboard .name-main {
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: auto;
+}
+
+.name-screen.is-keyboard .name-modal {
+  max-height: none;
+  padding: 8px 16px 12px;
+}
+
+.name-screen.is-keyboard .name-modal h1 {
+  font-size: 0.95rem;
+}
+
+.name-screen.is-keyboard .name-modal p {
+  margin: 4px 0 10px;
+  font-size: 0.8rem;
+}
+
+.name-screen.is-keyboard .name-modal input {
+  padding: 0.7rem 1rem;
+  margin-bottom: 10px;
+  font-size: 1rem;
 }
 
 /* Giveaway */

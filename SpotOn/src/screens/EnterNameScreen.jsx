@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ScreenShell from '../components/ScreenShell'
 import GoldButton from '../components/GoldButton'
 import BrandHeader from '../components/BrandHeader'
@@ -12,9 +12,52 @@ export default function EnterNameScreen({
   saving = false,
   error = '',
 }) {
+  const screenRef = useRef(null)
   const inputRef = useRef(null)
+  const [keyboardOpen, setKeyboardOpen] = useState(false)
   const trimmed = name.trim()
   const canSubmit = trimmed.length >= 1
+
+  useEffect(() => {
+    const viewport = window.visualViewport
+    const screen = screenRef.current
+    if (!screen) {
+      return undefined
+    }
+
+    const isPhone = () => window.matchMedia('(pointer: coarse)').matches
+
+    const sync = () => {
+      const focused = document.activeElement === inputRef.current
+      const open = focused && isPhone()
+
+      if (!open) {
+        setKeyboardOpen(false)
+        screen.style.height = ''
+        return
+      }
+
+      const visibleHeight = viewport ? viewport.height : window.innerHeight
+      setKeyboardOpen(true)
+      screen.style.height = `${Math.round(visibleHeight)}px`
+      requestAnimationFrame(() => {
+        inputRef.current?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+      })
+    }
+
+    sync()
+    viewport?.addEventListener('resize', sync)
+    viewport?.addEventListener('scroll', sync)
+    window.addEventListener('focusin', sync)
+    window.addEventListener('focusout', sync)
+    return () => {
+      viewport?.removeEventListener('resize', sync)
+      viewport?.removeEventListener('scroll', sync)
+      window.removeEventListener('focusin', sync)
+      window.removeEventListener('focusout', sync)
+      screen.style.height = ''
+    }
+  }, [])
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -26,7 +69,10 @@ export default function EnterNameScreen({
   }
 
   return (
-    <ScreenShell className="name-screen">
+    <ScreenShell
+      ref={screenRef}
+      className={`name-screen${keyboardOpen ? ' is-keyboard' : ''}`}
+    >
       <BrandHeader />
 
       <div className="name-main">
