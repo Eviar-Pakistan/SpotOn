@@ -1,0 +1,59 @@
+@font-face {
+  font-family: 'PepsiOwners2';
+  src: url('./fonts/PepsiOwners2-Extended220909.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #000;
+  --gold: #d4af37;
+  --gold-light: #f6e27a;
+  --gold-soft: #e8c547;
+  --gold-deep: #a67c14;
+  --gold-text: #e6c35c;
+  --white: #f5f5f5;
+  --muted: #cfcfcf;
+  --panel: #161616;
+  --panel-border: rgba(212, 175, 55, 0.45);
+  --serif: 'Cinzel', 'Times New Roman', serif;
+  --sans: 'Montserrat', system-ui, sans-serif;
+  --btn-font: 'PepsiOwners2', sans-serif;
+  --safe-top: max(12px, env(safe-area-inset-top));
+  --safe-bottom: max(14px, env(safe-area-inset-bottom));
+  --page-pad: clamp(14px, 4.6vw, 22px);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  height: 100%;
+  background: #000;
+  color: var(--white);
+  font-family: var(--sans);
+}
+
+body {
+  overflow: hidden;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
