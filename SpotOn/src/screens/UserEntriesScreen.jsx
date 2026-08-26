@@ -59,7 +59,11 @@ export default function UserEntriesScreen() {
             <h1>User Entries</h1>
             <p>{entries.length} {entries.length === 1 ? 'guest' : 'guests'} registered</p>
           </div>
-          <button type="button" className="entries-refresh" onClick={loadEntries}>
+          <button
+            type="button"
+            className="entries-refresh"
+            onClick={() => window.location.reload()}
+          >
             Refresh
           </button>
         </div>
