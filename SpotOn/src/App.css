@@ -104,10 +104,9 @@
 }
 
 .brand-header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  column-gap: 6px;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -129,7 +128,7 @@
 .brand-logo-spoton {
   height: clamp(48px, 9vw, 44px);
   width: auto;
- justify-self: end;
+
 }
 
 .brand-logo-dragon {
